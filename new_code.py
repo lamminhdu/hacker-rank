@@ -270,10 +270,9 @@ def divisibleSumPairs(n, k, arr):
 
 def migratoryBirds(arr):
     birds = [0 for i in range(6)]
-    print(birds)
     for i in arr:
-        print(i)
         birds[i] += 1
+    print(birds)
     return birds.index(max(birds))
 
 
@@ -284,4 +283,180 @@ def migratoryBirds_2(arr):
             birds_occurrences[i] = 1
         else:
             birds_occurrences[i] += 1
+    print(birds_occurrences)
+    return max(sorted(birds_occurrences), key= lambda x: birds_occurrences[x]) # sorted()
 
+
+def is_leap_year_gre(year):
+    if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
+        return True
+    return False
+
+
+def is_leap_year_jul(year):
+    if year % 4 == 0:
+        return True
+    return False
+
+
+def dayOfProgrammer(year):
+    # 256 days -> date
+    date = ['00', '09', str(year)]
+    if year == 1918:
+        date[0] = str(13+14)
+    elif year < 1918:
+        if is_leap_year_jul(year):
+            date[0] = '12'
+        else:
+            date[0] = '13'
+    else:
+        if is_leap_year_gre(year):
+            date[0] = '12'
+        else:
+            date[0] = '13'
+    return '.'.join(date)
+
+
+def bonAppetit(bill, k, b):
+    # check bill, Anna did not eat bill[k]
+    bill.pop(k)
+    b_actual = sum(bill) / 2
+    if b_actual == b:
+        print("Bon Appetit")
+    else:
+        print(int(b - b_actual))
+
+
+def sockMerchant(n, arr):
+    # how many pairs in a bunch of sock
+    pairs = 0
+    color = {}
+    for i in arr:
+        if i not in color:
+            color[i] = 1
+        else:
+            color[i] += 1
+
+    for j in color:
+        pairs += color[j] // 2
+    return pairs
+
+
+def pageCount(n, p):
+    # the minimum turn to page p
+    left_side = [i for i in range(n+1) if i % 2 == 0]
+    right_side = [i for i in range(n+1) if i % 2 != 0]
+    max_page = max(len(left_side), len(right_side))
+
+    if p in left_side:
+        first_to_last = left_side.index(p)
+        last_to_first = max_page - left_side.index(p) - 1
+    else:
+        first_to_last = right_side.index(p)
+        last_to_first = max_page - right_side.index(p) - 1
+
+    return min(first_to_last, last_to_first)
+
+
+def pageCount_2(n, p):
+    # p // 2: page to flip from front to back
+    # n // 2: how many page
+    # p // 2 + back to front = n // 2
+    return min(p//2, n // 2 - p // 2)
+
+
+def countingValleys(steps, path):
+    # Write your code here
+    sea_level = 0
+    valleys = 0
+    for i in path:
+        if i == 'U':
+            sea_level += 1
+        else:
+            sea_level -= 1
+        if sea_level == 0 and i == 'U':
+            valleys += 1
+    return valleys
+
+
+def getMoneySpent(keyboards, drives, b):
+    prices = []
+    for keyboard in keyboards:
+        for drive in drives:
+            price = keyboard + drive
+            if keyboard + drive <= b:
+                prices.append(price)
+    if prices:
+        return max(prices)
+    return -1
+
+
+def getMoneySpent_2(keyboards, drives, b):
+    # use sort
+    n = len(keyboards)
+    m = len(drives)
+    keyboards.sort(reverse=True)
+    drives.sort()
+    max_price = -1
+    ind = 0
+    """
+    wrong logical
+    for i in range(n):
+        for j in range(i, m):
+            price = keyboards[i] + drives[j]
+            print(i,j)
+            if price > b:
+                break
+            else:
+                max_price = max(max_price, price)
+    return max_price
+    """
+    for i in range(n):
+        for j in range(m):
+            price = keyboards[i] + drives[j]
+            if price > b:
+                ind += 1  # move to next keyboard when price higher than budget
+                break
+            else:
+                max_price = max(max_price, price)
+    return max_price
+
+
+def catAndMouse(x, y, z):
+    # which cat catch the mouse first?
+    cat_a = abs(z-x)
+    cat_b = abs(z-y)
+    if cat_a < cat_b:
+        res = 'Cat A'
+    elif cat_a > cat_b:
+        res = 'Cat B'
+    else:
+        res = 'Mouse C'
+    return res
+
+
+def pickingNumbers(arr):
+    n = len(arr)
+    i = 0
+    j = 0
+    max_element = 0
+    while i < n - 1:
+        element = 0
+        min_element = arr[i]
+        j = i + 1
+        while j < n:
+            if arr[j] < min_element:
+                min_element = arr[j]
+
+            if abs(min_element - arr[j]) <= 1:
+                element += 1
+                j += 1
+            else:
+                break
+        max_element = max(element, max_element)
+        i = j
+        i += 1
+    return max_element
+
+arr = [1,1,2,2,4,5,5,5]
+print(pickingNumbers(arr))
