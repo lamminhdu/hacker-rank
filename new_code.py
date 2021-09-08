@@ -1,8 +1,6 @@
 import math
 import string
 
-alphabet = string.ascii_letters
-
 
 def compareTriplets(arr, brr):
     # given 2 array, compare each element and return score
@@ -436,27 +434,142 @@ def catAndMouse(x, y, z):
 
 
 def pickingNumbers(arr):
+    # print the max length of sub array that different in sub = 1 or 0
     n = len(arr)
-    i = 0
-    j = 0
-    max_element = 0
-    while i < n - 1:
-        element = 0
-        min_element = arr[i]
-        j = i + 1
-        while j < n:
-            if arr[j] < min_element:
-                min_element = arr[j]
+    sub_arr = []
 
-            if abs(min_element - arr[j]) <= 1:
-                element += 1
-                j += 1
+    # looping through every element and separate it 2 sub array: less and greater
+    for i in range(n-1):
+        less = [arr[i]]
+        greater = [arr[i]]
+        for j in range(i+1, n):
+            diff = arr[j] - arr[i]
+            if diff == -1 or diff == 0:
+                less.append(arr[j])
+            if diff == 1 or diff == 0:
+                greater.append(arr[j])
+        sub_arr.append(less)
+        sub_arr.append(greater)
+
+    return len(max(sub_arr, key=lambda x: len(x)))
+
+
+def pickingNumbers_2(arr):
+    # using dictionary
+    frequent = {}
+
+    for i in arr:
+        if i not in frequent:
+            frequent[i] = 1
+        else:
+            frequent[i] += 1
+
+
+    for i in frequent:
+        if (i+1) in frequent:
+            max_sub = max(max_sub, frequent[i] + frequent[i+1])
+        else:
+            max_sub = max(max_sub, frequent[i])
+    return max_sub
+
+
+def pickingNumbers_3(arr):
+    # using count method
+    max_sub = 0
+
+    for i in arr:
+        count_i = arr.count(i)
+        count_next_i = arr.count(i+1)
+        max_sub = max(max_sub, count_i + count_next_i)
+    return max_sub
+
+
+def pickingNumbers_4(arr):
+    # using array
+    count = [0 for i in range(101)]
+    for i in arr:
+        count[i] += 1
+    max_sub = 0
+    for i in range(100):
+        max_sub = max(max_sub, count[i] + count[i+1])
+    return max_sub
+
+def gradingStudents(grades):
+    update = []
+    for grade in grades:
+        if grade < 38:
+            update.append(grade)
+        else:
+            plus = 0
+            while (grade + plus) % 5 != 0:
+                plus += 1
+            if plus < 3:
+                update.append(grade + plus)
             else:
-                break
-        max_element = max(element, max_element)
-        i = j
-        i += 1
-    return max_element
+                update.append(grade)
+    return update
 
-arr = [1,1,2,2,4,5,5,5]
-print(pickingNumbers(arr))
+
+def hurdleRace(k, height):
+    # calculate the doses of potion
+    tallest = max(height)
+    diff = tallest - k
+    return diff if diff > 0 else 0
+
+
+def designerPdfViewer(h, word):
+    #  calculate the area of word
+    alphabet = list(string.ascii_lowercase)
+    n = len(word)
+    word_height = [h[alphabet.index(letter)] for letter in word]
+    return max(word_height) * n
+
+
+def utopianTree(n):
+    # the height after n cycles
+    height = 1
+    for i in range(1, n+1):
+        if i % 2 == 0:
+            height += 1
+        else:
+            height *= 2
+    return height
+
+
+def angryProfessor(k, arr):
+    # the class cancel or not
+    early = 0
+    for i in arr:
+        if i <= 0:
+            early += 1
+    return 'YES' if early < k else 'NO'
+
+
+def reverse_num(num):
+    split = []
+    for i in str(num):
+        split.insert(0,i)
+    reversed_num = ''.join(split)
+    return int(reversed_num)
+
+
+def beautifulDays(i, j, k):
+    beautiful = 0
+    for num in range(i, j+1):
+        if abs(num-reverse_num(num)) % k == 0:
+            beautiful += 1
+    return beautiful
+
+
+def viralAdvertising(n):
+    people = 5
+    shared = people
+    liked = 0
+    for i in range(n):
+        liked += shared // 2
+        shared = (shared // 2) * 3
+    return liked
+
+
+def saveThePrisoner(n, m, s):
+    # Write your code here
