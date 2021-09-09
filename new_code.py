@@ -737,7 +737,7 @@ def taumBday_2(b, w, bc, wc, z):
     return b * min(bc, wc + z) + w * min(wc, bc + z)
 
 
-def kaprekarNumbers(p, q):
+def kaprekarNumbers(p, q):  # note: ** and *
     res = []
     for num in range(p, q+1):
         square = num ** 2
@@ -774,7 +774,7 @@ def minimumDistances_2(arr):
     return min(min_dis) if min_dis else -1
 
 
-def howManyGames(p,d,m,s):
+def howManyGames(p, d, m, s):
     buy = 0
     total = 0
     while total + p <= s:
@@ -805,7 +805,7 @@ def howManyGames_2(p, d, m, s):
     return games
 
 
-def howManyGames_3(p,d,m,s):
+def howManyGames_3(p, d, m, s):
     buy = 0
     while s - p >= 0:  # check the next subtract still > 0 (mean that remain s can buy 1 more game?)
         s -= p
@@ -901,6 +901,7 @@ def introTutorial(V, arr):
         if i == V:
             return i
 
+
 def introTutorial_2(V, arr):
     low = 0
     high = len(arr) - 1
@@ -935,6 +936,7 @@ def balancedSums(arr):  # time limit exceeded
         if sum_left == sum_right:
             return 'YES'
     return 'NO'
+
 
 def balancedSums_2(arr):
     sum_arr = sum(arr)
