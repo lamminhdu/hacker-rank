@@ -464,7 +464,7 @@ def pickingNumbers_2(arr):
         else:
             frequent[i] += 1
 
-
+    max_sub = 0
     for i in frequent:
         if (i+1) in frequent:
             max_sub = max(max_sub, frequent[i] + frequent[i+1])
@@ -548,7 +548,7 @@ def angryProfessor(k, arr):
 def reverse_num(num):
     split = []
     for i in str(num):
-        split.insert(0,i)
+        split.insert(0, i)
     reversed_num = ''.join(split)
     return int(reversed_num)
 
@@ -572,4 +572,394 @@ def viralAdvertising(n):
 
 
 def saveThePrisoner(n, m, s):
+    seat = (s+m-1) % n  # -1 mean that count from s
+    return seat if seat != 0 else n
+
+
+def circularArrayRotation(arr, k, queries):
+    n = len(arr)
+    rot = k % n  # find the rotation (1 circle = n)
+    if rot != 0:
+        for i in range(rot):
+            pop = arr.pop()
+            arr.insert(0,pop)
+
+    res = []
+    for j in queries:
+        res.append(arr[j])
+    return res
+
+
+def permutationEquation(p):
+    res = []
+    for i in range(len(p)):
+        res.append(p.index(p.index(i+1)+1)+1)
+    return res
+
+
+def jumpingOnClouds(c, k):
+    n = len(c)
+    energy = 100
+    step = k % len(c)  # first step
+    while step != 0:
+        energy -= c[step]*2 +1
+        step = (step+k) % n
+    energy -= c[0]*2 + 1  # cloud return to c[0]
+    return energy
+
+
+def findDigits(n):
+    count = 0
+    for i in str(n):
+        digit = int(i)
+        if digit != 0:
+            if n % digit == 0:
+                count += 1
+    return count
+
+
+def findDigits_2(n):
+    d = 0
+    num = n
+    while num != 0:
+        split = num % 10
+        num = int(num/10)
+        if split != 0:
+            if n % split == 0:
+                d += 1
+    return d
+
+
+def libraryFine(d1, m1, y1, d2, m2, y2):
+    diff_year = y1 - y2
+    diff_month = m1 - m2
+    diff_day = d1 - d2
+
+    if diff_year == 0 and diff_month == 0 and diff_day > 0:  # fine by day
+        fine = diff_day * 15
+    elif diff_year == 0 and diff_month > 0:  # fine by month
+        fine = diff_month * 500
+    elif diff_year > 0:  # find by year
+        fine = 10000
+    else:
+        fine = 0
+
+    return fine
+
+
+def min_except_zero(arr):
+    min_arr = 1000
+    for i in arr:
+        if i <= min_arr and i != 0:
+            min_arr = i
+    return min_arr
+
+
+def cutTheSticks(arr):
     # Write your code here
+    res = []
+    for i in range(len(arr)):
+        if max(arr) == 0:
+            break
+        else:
+            min_arr = min_except_zero(arr)
+            cut = 0
+            for j in range(len(arr)):
+                if arr[j] != 0:
+                    arr[j] -= min_arr
+                    cut +=1
+            res.append(cut)
+    return res
+
+
+def cutTheSticks_2(arr):
+    record = []
+    while arr:
+        shortest = min(arr)
+        arr = [(i-shortest) for i in arr]
+        record.append(len(arr))
+        while 0 in arr:
+            arr.remove(0)
+    return record
+
+
+def equalizeArray(arr):
+    frequent = [0 for i in range(101)]
+    for i in arr:
+        frequent[i] += 1
+    return sum(frequent) - max(frequent)
+
+
+def equalizeArray_2(arr):
+    # Write your code here
+    dict_type = {}
+    for i in arr:
+        if i in dict_type:
+            dict_type[i] += 1
+        else:
+            dict_type[i] = 1
+
+    max_frequent = 0
+    for j in dict_type:
+        if dict_type[j] > max_frequent:
+            max_frequent = dict_type[j]
+
+    if max_frequent == 1:
+        return len(arr) - 1
+    else:
+        delete = 0
+        max_occur = 1
+        for k in dict_type:
+            if dict_type[k] != max_frequent:
+                delete += dict_type[k]
+            else:
+                max_occur += 1
+                if max_occur > 2:
+                    delete += max_frequent
+        return delete
+
+
+def taumBday(b, w, bc, wc, z):
+    # Write your code here
+    check = abs(bc-wc)
+    if check > z:
+        cost = (b+w) * min(bc, wc)
+        if bc > wc:
+            cost += b*z
+        else:
+            cost += w*z
+    else:
+        cost = b*bc + w*wc
+    return cost
+
+
+def taumBday_2(b, w, bc, wc, z):
+    return b * min(bc, wc + z) + w * min(wc, bc + z)
+
+
+def kaprekarNumbers(p, q):
+    res = []
+    for num in range(p, q+1):
+        square = num ** 2
+        digit = len(str(num))
+        right = square % (10**digit)
+        left = square // 10**digit
+        if left + right == num:
+            res.append(num)
+    if not res:
+        print("INVALID RANGE")
+    else:
+        return res
+
+
+def minimumDistances(arr):
+    # Write your code here
+    dis_record = []
+    for i in range(len(arr) - 1):
+        for j in range(i+1, len(arr)):
+            if arr[i] == arr[j]:
+                dis = j - i
+                dis_record.append(dis)
+    return -1 if len(dis_record) == 0 else min(dis_record)
+
+
+def minimumDistances_2(arr):
+    seen = {}
+    min_dis = []
+    for i in range(len(arr)):
+        if arr[i] not in seen:
+            seen[arr[i]] = i
+        else:
+            min_dis.append(abs(seen[arr[i]] - i))
+    return min(min_dis) if min_dis else -1
+
+
+def howManyGames(p,d,m,s):
+    buy = 0
+    total = 0
+    while total + p <= s:
+        total += p
+        p -= d
+        buy += 1
+        if p <= m:
+            p = m
+    return buy
+
+
+def howManyGames_2(p, d, m, s):
+    # too much condition
+    games = 0
+    if s < p:
+        return games
+    cost = p
+    games += 1
+    while cost < s:
+        p -= d
+        if p <= m:
+            p = m
+        cost += p
+        games += 1
+
+    if cost > s:
+        games -= 1
+    return games
+
+
+def howManyGames_3(p,d,m,s):
+    buy = 0
+    while s - p >= 0:  # check the next subtract still > 0 (mean that remain s can buy 1 more game?)
+        s -= p
+        buy += 1
+        p -= d
+        if p < m:
+            p = m
+    return buy
+
+
+def chocolateFeast(n, c, m):
+    choco = n // c
+    wrap = choco
+    while wrap >= m:
+        new_choco = (wrap // m)
+        choco += new_choco
+        remain_wrap = wrap % m
+        wrap = new_choco + remain_wrap
+    return choco
+
+
+def workbook(n, k, arr):
+    # pages = []
+    # for i in arr:
+    #     page = []
+    #     for j in range(i):
+    #         if j % k != 0:
+    #             page.append(j+1)
+    #         else:
+    #             pages.append(page)
+    #             page = []
+    #             page.append(j+1)
+    #     if page:
+    #         pages.append(page)
+    # print(pages)
+
+    pages = []  # create an array of page which each page contain problem
+    for i in arr:
+        page = []
+        for j in range(1, i+1):  # do not use for j in range(i): because it will break at j = 0
+            page.append(j)
+            if j % k == 0:  # or we can use len(page) == k
+                pages.append(page)
+                page = []
+        if page:   # check page has element or not
+            pages.append(page)
+
+    special = 0
+    for x in range(len(pages)):
+        if x+1 in pages[x]:
+            special += 1
+    return special
+
+
+def workbook_2(n, k, arr):
+    page = 1  # page of book start from 1
+    special = 0
+
+    for problems in arr:  # loop through number of problems in array
+        for problem in range(1, problems+1):
+            if problem == page:  # special problem condition
+                special += 1
+            if problem == problems or problem % k == 0:  # break page
+                page += 1
+    return special
+
+
+def flatlandSpaceStations(n, c):  # ??? not correct
+    c.sort()
+    i = 0
+    chain = []
+    while i < n:
+        if i not in c:
+            start = i
+            while i < n and i not in c:
+                i += 1
+            end = i - 1
+            chain.append((end-start)//2)
+        i += 1
+    return max(chain)
+
+
+def flatlandSpaceStations_2(n, c):
+    c.sort()
+    max_dis = max(c[0], n - 1 - c[-1])
+    for i in range(len(c)-1):
+        max_dis = max((c[i+1] - c[i])//2, max_dis)
+    return max_dis
+
+
+def introTutorial(V, arr):
+    for i in range(len(arr)):
+        if i == V:
+            return i
+
+def introTutorial_2(V, arr):
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == V:
+            return mid
+        elif arr[mid] > V:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return None
+
+
+def icecreamParlor(m, arr):
+    seen = {}
+    for i in range(len(arr)):
+        complement = m - arr[i]
+        if arr[i] not in seen:
+            seen[complement] = i
+        else:
+            return [seen[arr[i]] + 1, i + 1]
+
+
+def balancedSums(arr):  # time limit exceeded
+    sum_arr = sum(arr)
+    print(sum_arr)
+    for i in range(len(arr)):
+        sum_left = sum([arr[j] for j in range(i)])
+        sum_right = sum_arr - sum_left - arr[i]
+        print(i,sum_left, sum_right)
+        if sum_left == sum_right:
+            return 'YES'
+    return 'NO'
+
+def balancedSums_2(arr):
+    sum_arr = sum(arr)
+    sub_sub = 0
+    for i in arr:
+        sub_sub += i
+        if 2*sub_sub - i == sum_arr:
+            return 'YES'
+    return 'NO'
+
+
+def balancedSums_final(arr): #code runing ok for all test !!!
+    sum_arr = sum(arr)
+    sum_left = 0
+    n = len(arr)
+
+    for i in range(n):
+        if i == 0:
+            sum_left = 0
+        elif i == (n - 1):
+            sum_left = sum_arr
+        else:
+            sum_left += arr[i-1]  # except arr[i]
+        sum_right = sum_arr - sum_left - arr[i]
+        # print(sum_left,i,sum_right)
+        if sum_left == sum_right:
+            return 'YES'
+    return 'NO'
